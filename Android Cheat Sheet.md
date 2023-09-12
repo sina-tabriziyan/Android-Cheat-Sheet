@@ -809,3 +809,104 @@ insert:
     # Context Receivers
 
 
+## Design Pattern
+### Builder
+    ```
+    class Car(builder: Builder) {
+    private val color: String
+    private val brand: String
+    private val model: String
+    private val year: Int
+
+    init {
+        color = builder.color
+        brand = builder.brand
+        model = builder.model
+        year = builder.year
+    }
+
+    class Builder {
+        var color: String = ""
+        var brand: String = ""
+        var model: String = ""
+        var year: Int = 0
+
+        fun setColor(color: String): Builder {
+            this.color = color
+            return this
+        }
+
+        fun setBrand(brand: String): Builder {
+            this.brand = brand
+            return this
+        }
+
+        fun setModel(model: String): Builder {
+            this.model = model
+            return this
+        }
+
+        fun setYear(year: Int): Builder {
+            this.year = year
+            return this
+        }
+
+        fun build(): Car {
+            return Car(this)
+        }
+    }
+}
+val car = Car.Builder()
+    .setColor("Red")
+    .setBrand("Toyota")
+    .setModel("Camry")
+    .setYear(2022)
+    .build()
+    ```
+### Factory
+```
+bstract class Vehicle {
+    abstract fun start()
+    abstract fun stop()
+}
+
+class Car : Vehicle() {
+    override fun start() {
+        println("Car started.")
+    }
+
+    override fun stop() {
+        println("Car stopped.")
+    }
+}
+
+class Bike : Vehicle() {
+    override fun start() {
+        println("Bike started.")
+    }
+
+    override fun stop() {
+        println("Bike stopped.")
+    }
+}
+
+class VehicleFactory {
+    fun createVehicle(type: String): Vehicle {
+        return when (type) {
+            "car" -> Car()
+            "bike" -> Bike()
+            else -> throw IllegalArgumentException("Invalid vehicle type.")
+        }
+
+
+
+val factory = VehicleFactory()
+
+val car = factory.createVehicle("car")
+car.start() // Output: Car started.
+car.stop()  // Output: Car stopped.
+
+val bike = factory.createVehicle("bike")
+bike.start() // Output: Bike started.
+bike.stop()  // Output: Bike stopped.
+```
