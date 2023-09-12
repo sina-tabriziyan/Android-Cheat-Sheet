@@ -116,8 +116,48 @@ i.putExtras(b); // where i is intent
     Intent i = new Intent(ACTION_VIEW,Uri.parse("http://www.interview bit.com")); 
     startActivity(i);
     ```
+## Services
+### Started Services:
+    - این نوع سرویس برای اجرای عملیات‌های طولانی‌مدت و دائمی در پس‌زمینه استفاده می‌شود.
+می‌توان آن را با استفاده از متد startService() شروع کرد و با استفاده از متد stopService() یا stopSelf() متوقف کرد.
+این سرویس‌ها در همان رشته اجرایی (main thread) برنامه اجرا می‌شوند.
+برای استفاده از این نوع سرویس، باید از کلاس Service اندروید به عنوان پدر برای ساخت یک سرویس جدید استفاده کنید و متدهای onStartCommand() و onBind() را پیاده‌سازی کنید.
+### Bound Services:
+    - این نوع سرویس برای برقراری ارتباط بین یک سرویس و اجزای دیگر برنامه (مانند اکتیویتی‌ها) استفاده می‌شود.
+می‌توان آن را با استفاده از متد bindService() شروع کرد و با استفاده از متد unbindService() متوقف کرد.
+این سرویس‌ها در همان رشته اجرایی (main thread) برنامه اجرا می‌شوند.
+برای استفاده از این نوع سرویس، باید از کلاس Service اندروید به عنوان پدر برای ساخت یک سرویس جدید استفاده کنید و متدهای onStartCommand() و onBind() را پیاده‌سازی کنید.
+### Intent Services:
+    - این نوع سرویس برای اجرای عملیات‌های یک‌باره و موقت در پس‌زمینه استفاده می‌شود.
+برای شروع Intent Service، می‌توان از متد startService() استفاده کرد.
+این سرویس‌ها در یک رشته (thread) جداگانه از رشته اصلی برنامه اجرا می‌شوند و پس از اتمام عملیات خود به صورت خودکار متوقف می‌شوند.
+برای استفاده از این نوع سرویس، باید از کلاس IntentService اندروید به عنوان پدر برای ساخت یک سرویس جدید استفاده کنید و متد onHandleIntent() را پیاده‌سازی کنید.
+### Foreground Services:
+    - 
+این نوع سرویس برای اجرای عملیات‌های مهم و قابل مشاهده در پس‌زمینه استفاده می‌شود.
+این سرویس‌ها باید از نوع برجسته (foreground) باشند و باید یک اعلان (notification) به کاربر نمایش داده شود تا کاربر از فعالیت سرویس مطلع شود.
+این نوع سرویس‌ها برای عملیات‌هایی مانند پخش موسیقی در پس‌زمینه، دانلود فایل‌ها، ضبط صدا و سایر عملیات‌های مشابه استفاده می‌شوند.
 
- 
+
+
+## WorkManager
+```
+class MyWorker(context: Context, workerParams: WorkerParameters) : Worker(context, workerParams) {
+    override fun doWork(): Result {
+        return Result.success()
+    }
+}
+
+class MainActivity : AppCompatActivity() {
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_main)
+        val myWorkRequest = OneTimeWorkRequestBuilder<MyWorker>().build()
+        WorkManager.getInstance(this).enqueue(myWorkRequest)
+    }
+}
+
+```
 ### What is context?
 - The context in Android is the context of the current state of the application or object. The context comes with services like giving access to databases and preferences, resolving resources, and more.
 
