@@ -1,40 +1,7 @@
 # Android Interview
-
-## Base
-- What is Context? How is it used?
-    - It is the context of the current state of the application.
-    - It can be used to get information regarding the activity and application.
-    - It can be used to get access to resources, databases, and shared preferences, and etc.
-    - Both the Activity and Application classes extend the Context class.
-
-Context is almost everywhere in Android Development and it is the most important thing in Android Development, so we must understand to use it correctly.
-
-Wrong use of Context can easily lead to memory leaks in an android application.
-
-Mainly two types of context:
-- Application Context: 
-    - It is an instance that is the singleton and can be accessed in activity via getApplicationContext(). This context is tied to the lifecycle of an application. The application context can be used where you need a context whose lifecycle is separate from the current context or when you are passing a context beyond the scope of activity.
-
-    - Example Use: If you have to create a singleton object for your application and that object needs a context, always pass the application context.
-
-    - If you pass the activity context here, it will lead to the memory leak as it will keep the reference to the activity and activity will not be garbage collected.
-
-    - In case, when you have to initialize a library in an activity, always pass the application context, not the activity context.
-
-    - You only use getApplicationContext() when you know you need a Context for something that may live longer than any other likely Context you have at your disposal.
-- Activity Context
-    - This context is available in an activity. This context is tied to the lifecycle of an activity. The activity context should be used when you are passing the context in the scope of an activity or you need the context whose lifecycle is attached to the current context.
-
-    - Example Use: If you have to create an object whose lifecycle is attached to an activity, you can use the activity context.
-
-
-## Activity
 ###  What is an activity?
 - Activity in java is a single screen that represents GU- Graphical   User Interface) with which users can interact in- rder to do  something like dial the phone, view email, etc.
 
-### What is onSavedInstanceState() and onRestoreInstanceState() in activity?
-- onSavedInstanceState() - This method is used to store data before pausing the activity.
-- onRestoreInstanceState() - This method is used to recover the saved state of an activity when the activity is recreated after destruction. So, the onRestoreInstanceState() receive the bundle that contains the instance state information.
 ### What is a service in Android?
 - Service is an application component that facilitates - anapplication     to run in the background in order to - performlong-running operations    without user interaction. A - servicecan run continuously in the    background even if the - applicationis closed or even after the user    switches to - anotherapplication
 ### Differentiate Activities from Services:
@@ -569,7 +536,7 @@ fun printItems(n: Int) {
 ### O(n2 + n)
 - in this case turns to O(n2)
 
-### O(1) == Constant time
+### O(1)
 
 ```
 fun addItem(n: Int): Int {
