@@ -910,3 +910,48 @@ val bike = factory.createVehicle("bike")
 bike.start() // Output: Bike started.
 bike.stop()  // Output: Bike stopped.
 ```
+### Observer
+```
+interface Observer {
+    fun update(data: Any)
+}
+class Subject {
+    private val observers: MutableList<Observer> = mutableListOf()
+
+    fun attach(observer: Observer) {
+        observers.add(observer)
+    }
+
+    fun detach(observer: Observer) {
+        observers.remove(observer)
+    }
+
+    fun notifyObservers(data: Any) {
+        for (observer in observers) {
+            observer.update(data)
+        }
+    }
+}
+
+class ConcreteObserver(private val name: String) : Observer {
+    override fun update(data: Any) {
+        println("$name received data: $data")
+    }
+}
+
+fun main() {
+    val subject = Subject()
+
+    val observer1 = ConcreteObserver("Observer 1")
+    val observer2 = ConcreteObserver("Observer 2")
+
+    subject.attach(observer1)
+    subject.attach(observer2)
+
+    subject.notifyObservers("Hello World!")
+
+    subject.detach(observer2)
+
+    subject.notifyObservers("Goodbye!")
+}
+```
