@@ -1,4 +1,25 @@
 # Android Interview
+## GIT
+```
+      A---B---C topic
+     /
+D---E---F---G master
+```
+### Git Rebase
+```
+              A'--B'--C' topic
+             /
+D---E---F---G master
+```
+### Git Cherry pick
+```
+      A---B---C topic
+     /
+D---E---F---G master
+             \
+              A'--B'--C' topic_new
+```
+
 ###  What is an activity?
 - Activity in java is a single screen that represents GU- Graphical   User Interface) with which users can interact in- rder to do  something like dial the phone, view email, etc.
 
