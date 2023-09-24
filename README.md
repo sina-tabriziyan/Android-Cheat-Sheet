@@ -855,6 +855,13 @@ insert:
 ```
 
 
+# Kotlin
+## Scope Function
+    - apply,with,run,let,also
+
+    - apply returns the receiver
+    - with  returns a result of the last expression whithin its block. 
+
 
 
 # Android Architecture
