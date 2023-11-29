@@ -1005,3 +1005,69 @@ fun main() {
     subject.notifyObservers("Goodbye!")
 }
 ```
+### Notification Builder
+- this is another sample for create notification with Builder; just create channel and add it to this builder
+- with this bellow we could create channel for any notification:
+```
+lateinit var notificationManager: NotificationManagerCompat
+val YOUR_CHANNEL_ID= "your_channel_id"
+notificationManager=NotificationManagerCompat.from(context)
+val yourNotificationChannel=NotificationChannel(YOUR_CHANNEL_ID,"ApplicationChannels",NotificationManager.IMPORTANCE_HIGH)
+notificationManager.createNotificationChannel(notificationChannelScreenShot)      
+```
+and use this channel and pass to NotificationBuilder bellow:
+```
+class NotificationBuilder(private val context: Context, channelId:String) {
+
+    private var intent: Intent? = null
+    private val notificationManagerCompat: NotificationManagerCompat = NotificationManagerCompat.from(context)
+    private val builder: NotificationCompat.Builder = NotificationCompat.Builder(context, channelId)
+
+    fun setIntent(intent: Intent): NotificationBuilder {
+        this.intent = intent;return this
+    }
+
+    fun setSmallIcon(icon: Int): NotificationBuilder {
+        builder.setSmallIcon(icon);return this
+    }
+
+    fun setTitle(title: CharSequence): NotificationBuilder {
+        builder.setContentTitle(title);return this
+    }
+
+    fun setContentText(text: CharSequence): NotificationBuilder {
+        builder.setContentText(text);return this
+    }
+
+    fun setAutoCancel(autoCancel: Boolean): NotificationBuilder {
+        builder.setAutoCancel(autoCancel);return this
+    }
+
+    fun setPriority(priority: Int): NotificationBuilder {
+        builder.priority = priority;return this
+    }
+
+    fun build(): Notification {
+        if (intent != null) {
+            builder.setContentIntent(PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT))
+        }
+        return builder.build()
+    }
+
+    fun show(notificationId: Int) {
+        val notification = build()
+        if (checkNotificationPolicyPermission()) {
+            notificationManagerCompat.notify(notificationId, notification)
+        } else {
+            requestNotificationPolicyPermission()
+        }
+    }
+
+    private fun checkNotificationPolicyPermission(): Boolean =
+        ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_NOTIFICATION_POLICY) == PackageManager.PERMISSION_GRANTED
+
+    private fun requestNotificationPolicyPermission() {
+        ActivityCompat.requestPermissions(context as Activity, arrayOf(Manifest.permission.ACCESS_NOTIFICATION_POLICY), 1)
+    }
+}
+```
