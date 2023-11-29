@@ -1071,3 +1071,51 @@ class NotificationBuilder(private val context: Context, channelId:String) {
     }
 }
 ```
+
+### Base Component
+- BaseFragment
+- BaseViewModel
+
+## BaseFragment
+```
+abstract class BaseFragment<VB : ViewBinding, VM : ViewModel>(
+    private val bindingInflater: (LayoutInflater, ViewGroup?, isAttach: Boolean) -> VB,
+    private val viewModelClass: KClass<VM>
+) : Fragment() {
+
+
+    private var _binding: VB? = null
+    protected val binding: VB
+        get() = _binding!!
+
+    protected val viewModel: VM by lazy {
+        ViewModelProvider(this)[viewModelClass.java]
+    }
+
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        _binding = bindingInflater.invoke(inflater, container, false)
+        return binding.root
+    }
+
+    fun <T> launchWhen(
+        block: suspend CoroutineScope.() -> T,
+        lifeCycle: Lifecycle.State
+    ) {
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewLifecycleOwner.lifecycle.repeatOnLifecycle(lifeCycle) {
+                block()
+            }
+        }
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
+    }
+}
+```
+
