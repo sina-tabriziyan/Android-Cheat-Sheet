@@ -1072,11 +1072,11 @@ class NotificationBuilder(private val context: Context, channelId:String) {
 }
 ```
 
-### Base Component
+# Base Component
 - BaseFragment
 - BaseViewModel
 
-## BaseFragment
+### BaseFragment
 ```
 abstract class BaseFragment<VB : ViewBinding, VM : ViewModel>(
     private val bindingInflater: (LayoutInflater, ViewGroup?, isAttach: Boolean) -> VB,
@@ -1116,6 +1116,19 @@ abstract class BaseFragment<VB : ViewBinding, VM : ViewModel>(
         super.onDestroyView()
         _binding = null
     }
+}
+```
+### BaseViewModel
+```
+abstract class BaseViewModel : ViewModel() {
+    private val _isLoading: MutableStateFlow<Boolean> = MutableStateFlow(false)
+    val isLoading: StateFlow<Boolean>
+        get() = _isLoading
+
+    fun setLoadingState(loading: Boolean) {
+        _isLoading.value = loading
+    }
+
 }
 ```
 
