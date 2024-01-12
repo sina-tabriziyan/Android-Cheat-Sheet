@@ -1131,9 +1131,9 @@ abstract class BaseViewModel : ViewModel() {
 
 }
 ```
-# --------------------------------------------------Test--------------------------------------------
-## Test Types 
-### Unit test, Integration test, ui test
+#TEST
+##Test Types 
+###Unit test, Integration test, ui test
 - Unit tests: Tests of single units of our app (e.g. testing the functions of class) - 70%
 - Test how two components of our app work together(e.g. Fragment and viewModel) - 20%
 - Test that check if many or all components if your app work together well and if the ui look like it should - 10%
