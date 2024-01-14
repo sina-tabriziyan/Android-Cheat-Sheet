@@ -861,7 +861,8 @@ insert:
 
 ## Design Pattern
 ### Builder
-    ```
+
+```
     class Car(builder: Builder) {
     private val color: String
     private val brand: String
@@ -906,13 +907,14 @@ insert:
         }
     }
 }
-val car = Car.Builder()
-.setColor("Red")
-.setBrand("Toyota")
-.setModel("Camry")
-.setYear(2022)
-.build()
+    val car = Car.Builder()
+    .setColor("Red")
+    .setBrand("Toyota")
+    .setModel("Camry")
+    .setYear(2022)
+    .build()
 ```
+
 ### Factory
 ```
 bstract class Vehicle {
@@ -1118,7 +1120,7 @@ abstract class BaseFragment<VB : ViewBinding, VM : ViewModel>(
     }
 }
 ```
-### BaseViewModel
+
 ```
 abstract class BaseViewModel : ViewModel() {
     private val _isLoading: MutableStateFlow<Boolean> = MutableStateFlow(false)
@@ -1131,12 +1133,90 @@ abstract class BaseViewModel : ViewModel() {
 
 }
 ```
-#TEST
-##Test Types 
-###Unit test, Integration test, ui test
-- Unit tests: Tests of single units of our app (e.g. testing the functions of class) - 70%
-- Test how two components of our app work together(e.g. Fragment and viewModel) - 20%
-- Test that check if many or all components if your app work together well and if the ui look like it should - 10%
 
-### Dependencies
-- 
+
+# TEST
+### 
+### Testing Parameter
+- Unit test : Base fundation of parameter @smallTest
+- Integrated test : Test components @MediumTest
+- Ui test : Top of the parameter @LargeTest
+
+| Feature                   | Small         | Medium            | Large     |
+| :---                      |:----:         |:----:             |:----:     |
+| Network acess             | No            | Localhost only    |Yes        |
+| Database                  | No            | Yes               |Yes        |
+| File system access        | No            | Yes               |Yes        |
+| Use extenral systems      | No            | Discourage        |Yes        |
+| Multiple threads          | No            | Yes               |Yes        |
+| Sleep statements          | No            | Yes               |Yes        |
+| System Properties         | No            | Yes               |Yes        |
+| Time limit(second)        | 60            | Yes               |Yes        |
+
+### Testing  Room Database
+```
+@RunWith(AndroidJnuit4::class)
+class classDaoTest{
+
+    @get:Rule
+    var instantTaskExecutorRule = InstantTaskExecutor() // this tell JUnit4 run function by function or step by step in this class
+    
+    private lateinit var database: ClassDataBase
+    private lateinit var dao:ClassDao
+
+    @Before
+    fun setup(){
+        database = Room.inMemoryDatabaseBuilder( // just stay in memory
+            ApplicationProvider.getApplicationContext(),
+            ClassDatabase::class.java
+        ).allowMainThreadQueries() // we need to handle every test case we dont want to access multiple thread to each other
+        .build()
+
+        dao=database.classDao()
+    }
+
+
+    @After
+    fun tearDown(){
+        database.close
+    }
+
+
+    @Test
+    fun insertItem() = runBlockingTest{
+        val item = Item("name","family",2,10f)
+        dao.insertItem(item)
+
+        val allItem = dao.observeAllItems().getOrAwaitValue() // getOrAwaitValue() this is the extension function
+        assertThat(allItem).contains(item)   
+         
+    }
+
+
+    @Test
+    fun deleteItem() = runBlocking{
+        val item = Item("name","family",2,10f)
+        dao.insertItem(item)
+        dao.deleteItem(item)
+
+        val allItem = dao.observeAllItems().getOrAwaitValue() 
+        assertThat(allItem).doesNotContain(item)   
+
+    }
+
+    @Test
+    fun observeSumAmountItem() = runBlocking {
+        val item1 = Item("name1","family",2,20f)
+        val item2 = Item("name2","family",3,3f)
+        val item3 = Item("name3","family",1,200f)
+
+        dao.insertItem(item1)
+        dao.insertItem(item2)
+        dao.insertItem(item3)
+
+        val totalAmountSum = dao.observeTotalAmount().getOrAwaitValue()
+        assertThat(totalAmountSum).isEqualTo(2*20f + 3*3f)
+        
+    }
+}
+```
