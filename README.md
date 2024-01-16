@@ -1220,3 +1220,96 @@ class classDaoTest{
     }
 }
 ```
+
+### Record Audio
+```
+interface AudioRecorder {
+    fun start(outputFile: File)
+    fun stop()
+}
+
+interface AudioPlayer {
+    fun playFile(file: File)
+    fun stop()
+}
+
+
+// Recorder
+class MyAudioRecorder(private val context: Context) : AudioRecorder {
+    private var recorder: MediaRecorder? = null
+    private fun createRecorder(): MediaRecorder {
+        return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) MediaRecorder(context) else MediaRecorder()
+    }
+
+    override fun start(outputFile: File) {
+        createRecorder().apply {
+            setAudioSource(MediaRecorder.AudioSource.MIC)
+            setOutputFormat(MediaRecorder.OutputFormat.MPEG_4)
+            setAudioEncoder(MediaRecorder.AudioEncoder.AAC)
+            setOutputFile(FileOutputStream(outputFile).fd)
+            prepare()
+            start()
+            recorder = this
+        }
+    }
+
+    override fun stop() {
+        recorder?.stop()
+        recorder?.reset()
+        recorder = null
+    }
+}
+
+
+// Player
+class MyAudioPlayer(private val context: Context) : AudioPlayer {
+    private var player: MediaPlayer? = null
+
+    override fun playFile(file: File) {
+        MediaPlayer.create(context, file.toUri()).apply {
+            player = this
+            start()
+        }
+    }
+
+    override fun stop() {
+        player?.stop()
+        player?.release()
+        player = null
+    }
+}
+
+
+class MainActivity : AppCompatActivity() {
+    private val recorder by lazy {
+        MyAudioRecorder(applicationContext)
+    }
+
+    private val player by lazy {
+        MyAudioPlayer(applicationContext)
+    }
+
+    private var audioFile: File? = null
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_main)
+        // geting permissons
+        ActivityCompat.requestPermissions(
+            this,
+            arrayOf(android.Manifest.permission.RECORD_AUDIO),
+            102
+        )
+        binding.recordBtn.setOnClickListener {
+            File(cacheDir, "audio.mp3").also {
+                recorder.start(it)
+                audioFile = it
+            }
+        }
+        
+        binding.playAudio.setOnClickListener{
+            audioFile?.let { player.playFile(it) }
+        }
+    }
+}
+```
