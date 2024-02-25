@@ -1,25 +1,4 @@
 # Android Interview
-## GIT
-```
-      A---B---C topic
-     /
-D---E---F---G master
-```
-### Git Rebase
-```
-              A'--B'--C' topic
-             /
-D---E---F---G master
-```
-### Git Cherry pick
-```
-      A---B---C topic
-     /
-D---E---F---G master
-             \
-              A'--B'--C' topic_new
-```
-
 ###  What is an activity?
 - Activity in java is a single screen that represents GU- Graphical   User Interface) with which users can interact in- rder to do  something like dial the phone, view email, etc.
 
@@ -31,9 +10,9 @@ D---E---F---G master
     - Used when the user interface is necessary.
     - They are dependent.
 - Services
-    - These are mainly designed to run in the background. Foreground services are also available.
-    - Used when the user interface is not necessary.
-    - They act independently.
+  - These are mainly designed to run in the background. Foreground services are also available.
+  - Used when the user interface is not necessary.
+  - They act independently.
 
 ### What is the use of Bundle in Android?
 - Bundles are used to pass the required data between various Android activities. These are like HashMap that can take trivial data types. Below code shows how to transfer a piece of data by using bundle:
@@ -46,18 +25,18 @@ i.putExtras(b); // where i is intent
 - An adapter in Android acts as a bridge between an AdapterView and the underlying data for that view. The adapter holds the data and sends the data to the adapter view, the view can take the data from the adapter view and shows the data on different views like a spinner, list view, grid view, etc
 ### What is AAPT?
 - AAPT stands for Android Asset Packaging Tool. It is a build tool that gives the ability to developers to view, create, and update ZIP-compatible archives (zip, jar, and apk). It parses, indexes, and compiles the resources into a binary format that is optimized for the platform of Android
-
+  
 ### What is Android Debug Bridge(ADB)?
 - Android Debug Bridge is a command-line tool used to allow and control communication with an emulator instance. It gives the power for developers to execute remote shell commands to run applications on an emulator.
 ### What is DDMS?
 - DDMS(Dalvik Debug Monitor Server) is a debugging tool in the Android platform. It gives the following list of debugging features:
-    - Port forwarding services.
-    - Thread and heap information.
-    - Logcat.
-    - Screen capture on the device.
-    - Network traffic tracking.
-    - Incoming call and SMS spoofing.
-    - Location data spoofing.
+  - Port forwarding services.
+  - Thread and heap information.
+  - Logcat.
+  - Screen capture on the device.
+  - Network traffic tracking.
+  - Incoming call and SMS spoofing.
+  - Location data spoofing.
 ### What is AIDL? Which data types are supported by AIDL?
 - AIDL(Android Interface Definition Language) is a tool that handles the interface requirements between a client and a service for interprocess communication(IPC) to communicate at the same level.
 
@@ -130,49 +109,27 @@ i.putExtras(b); // where i is intent
         i.putExtra("Value2","This Value two for ActivityTwo"); 
         startactivity(i);
         ```
-
+        
 - Implicit Intent:
-    - An Implicit Intent permits you to declare the action you want to carry out. Further, the Android system will check which components are registered to handle that specific action based on intent data. Here target component is not defined in the intent.
-      ```
-      Intent i = new Intent(ACTION_VIEW,Uri.parse("http://www.interview bit.com")); 
-      startActivity(i);
-      ```
-## Services
-### Started Services:
-### Bound Services:
-### Intent Services:
-### Foreground Services:
+  - An Implicit Intent permits you to declare the action you want to carry out. Further, the Android system will check which components are registered to handle that specific action based on intent data. Here target component is not defined in the intent.
+    ```
+    Intent i = new Intent(ACTION_VIEW,Uri.parse("http://www.interview bit.com")); 
+    startActivity(i);
+    ```
 
-## WorkManager
-```
-class MyWorker(context: Context, workerParams: WorkerParameters) : Worker(context, workerParams) {
-    override fun doWork(): Result {
-        return Result.success()
-    }
-}
-
-class MainActivity : AppCompatActivity() {
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
-        val myWorkRequest = OneTimeWorkRequestBuilder<MyWorker>().build()
-        WorkManager.getInstance(this).enqueue(myWorkRequest)
-    }
-}
-
-```
+ 
 ### What is context?
 - The context in Android is the context of the current state of the application or object. The context comes with services like giving access to databases and preferences, resolving resources, and more.
 
 There are two types of context. They are:
 - Activity context
-  - 
-  This activity context is attached to the lifecycle of an activity.
-  The activity context can be used when you are passing the context in the scope of an activity or you need the context whose lifecycle is attached to the context of the activity.
+    - 
+    This activity context is attached to the lifecycle of an activity.
+    The activity context can be used when you are passing the context in the scope of an activity or you need the context whose lifecycle is attached to the context of the activity.
 - Application context:
-  -
-  This application context is attached to the lifecycle of an application.
-  The application context should be used where you need a context whose lifecycle is separate from the current context or when you are passing a context beyond the scope of activity.
+    -
+    This application context is attached to the lifecycle of an application.
+    The application context should be used where you need a context whose lifecycle is separate from the current context or when you are passing a context beyond the scope of activity.
 
 ### What is ANR in Android? What are the measures you can take to avoid ANR?
 - ANR(Application is Not Responding) is a dialog box that appears when the application is not responding. This ANR dialogue is displayed whenever the main thread within an application has been unresponsive for a long time under the following conditions:
@@ -180,7 +137,7 @@ There are two types of context. They are:
     - When a broadcast receiver has not completed its execution within 10 seconds.
 
 Following measures can be taken to avoid ANR:
-- An application should perform lengthy database or networking operations in separate threads to avoid ANR.
+  - An application should perform lengthy database or networking operations in separate threads to avoid ANR.
 - For background task-intensive applications, you can lessen pressure from the UI thread by using the IntentService.
 ### What are broadcast receivers? How is it implemented?
 - A broadcast receiver is a mechanism used for listening to system-level events like listening for incoming calls, SMS, etc. by the host application. It is implemented as a subclass of BroadcastReceiver class and each message is broadcasted as an intent object.
@@ -193,22 +150,22 @@ public class MyReceiver extends BroadcastReceiver
 ### What is the difference between Serializable and Parcelable? Which is the best approach in Android?
 - While developing applications usually it needs to transfer data from one activity to another. This data needs to be added into a corresponding intent object. Some additional actions are required to make the data suitable for transfer. For doing that the object should be either serializable or parcelable.
     - Serializable:
-        - Serializable is a standard Java interface. In this approach, you simply mark a class Serializable by implementing the interface and java will automatically serialize it.
-          Reflection is used during the process and many additional objects are created. This leads to plenty of garbage collection and poor performance
+      - Serializable is a standard Java interface. In this approach, you simply mark a class Serializable by implementing the interface and java will automatically serialize it.
+    Reflection is used during the process and many additional objects are created. This leads to plenty of garbage collection and poor performance
     - Parcelable:
-        - Parcelable is an Android-specific interface. In this approach, you implement the serialization yourself.
-        - Reflection is not used during this process and hence no garbage is created.
-        - Parcelable is far more efficient than Serializable since it gets around some problems with the default Java serialization scheme. Also, it is faster because it is optimized for usage on the development of Android, and shows better results.
+      - Parcelable is an Android-specific interface. In this approach, you implement the serialization yourself.
+      - Reflection is not used during this process and hence no garbage is created.
+      - Parcelable is far more efficient than Serializable since it gets around some problems with the default Java serialization scheme. Also, it is faster because it is optimized for usage on the development of Android, and shows better results.
 
 ### What are the differences between Service and Thread?
 - Service
-    - Service is an application component that facilitates an application to run in the background in order to perform long-running operations without user interaction.
-    - It exposes few functionalities to other applications by calling Context.bindService().
-    - When an application is killed, service is not killed.
+  - Service is an application component that facilitates an application to run in the background in order to perform long-running operations without user interaction. 
+  - It exposes few functionalities to other applications by calling Context.bindService().
+  - When an application is killed, service is not killed.
 - Thread
-    - A Thread is a concurrent unit of execution.
-    - Google has brought in handlers and loopers into threads.
-    - When an application is killed, the thread is killed.
+  - A Thread is a concurrent unit of execution.
+  - Google has brought in handlers and loopers into threads.
+  - When an application is killed, the thread is killed.
 ### What is the content provider? How it is implemented?
 - Content provider is one of the primary building blocks of Android applications, which manages access to a central repository of data. It acts as a standard interface that connects data in one process with code running in another process. So it can be used to share the data between different applications.
 
@@ -228,44 +185,46 @@ public class MyReceiver extends BroadcastReceiver
     - For example, if you try and use API 15 features but set compileSdkVersion to 14, you will get a compilation error. If you set compileSdkVersion to 15 you can still run the app on an API 14 device as long as your app’s execution paths do not attempt to invoke any APIs specific to API 15.
 
 - targetSdkVersion:
-    - The targetSdkVersion indicates that you have tested your app on (presumably up to and including) the version you specify. This is like a certification or sign-off you are giving the Android OS as a hint to how it should handle your application in terms of OS features.
-    - For example, setting the targetSdkVersion value to “11” or higher permits the system to apply a new default theme (Holo) to the application when running on Android 3.0 or higher. It also disables screen compatibility mode when running on larger screens (because support for API level 11 implicitly supports larger screens)
+  - The targetSdkVersion indicates that you have tested your app on (presumably up to and including) the version you specify. This is like a certification or sign-off you are giving the Android OS as a hint to how it should handle your application in terms of OS features.
+  - For example, setting the targetSdkVersion value to “11” or higher permits the system to apply a new default theme (Holo) to the application when running on Android 3.0 or higher. It also disables screen compatibility mode when running on larger screens (because support for API level 11 implicitly supports larger screens)
 ### What is JobScheduler?
 - The JobSchedular API is used for scheduling different types of jobs against the framework that will be executed in your app’s own process. This allows your application to perform the given task while being considerate of the device’s battery at the cost of timing control.
 
 - The JobScheduler supports batch scheduling of jobs. The Android system can combine jobs for reducing battery consumption. JobManager automatically handles the network unreliability so it makes handling uploads easier.
 
 - Here is some example of a situation where you would use this job scheduler:
-    -  Tasks that should be done when the device is connected to a power supply.
-    - Tasks that require a Wi-Fi connection or network access.
+  -  Tasks that should be done when the device is connected to a power supply.
+   - Tasks that require a Wi-Fi connection or network access.
     - Tasks should run on a regular basis as a batch where the timing is not critical.
 
 
 ### some questions:
-1. API stands for  (Application Programming Interface  )
-2. What is an interface in Android?  (It acts as a bridge between class and the outside world. )
-3. What does Manifest.xml in Android consist of?  (Has all of the information about an application.)
-4. (Android Inc. ) has developed the Android.
-5. What is JNI in Android?  (Java Native Interface)
-6. Android web browser is based on  (Open-source webkit )
-7. After installation on a device, each Android application lives in  (Security sandbox)?
+ 1. API stands for  (Application Programming Interface  )
+ 2. What is an interface in Android?  (It acts as a bridge between class and the outside world. )
+ 3. What does Manifest.xml in Android consist of?  (Has all of the information about an application.)
+ 4. (Android Inc. ) has developed the Android.
+ 5. What is JNI in Android?  (Java Native Interface)
+ 6. Android web browser is based on  (Open-source webkit )
+ 7. After installation on a device, each Android application lives in  (Security sandbox)?
 
 
-## Scope of coroutine
-- Global Scope
-- LifeCycle Scope
-- ViewModel Scope
+
 
 # Coroutines
-## Coroutine Concepts:
+### Coroutine Concepts:
 - Scope
 - suspending functions
 - jobs
 - context
 - Dispatcher
 - error handling
-
-## Coroutine Builders:
+### Scope of coroutine
+- Global Scope: the scope of the coroutine is the lifecycle of the entire application
+- runBlocking: create scope and runs a coroutune in a blocking way
+- coroutineScope: create a bew scope does not complete until all childeren coroutines complete
+- LifeCycle Scope: 
+- ViewModel Scope:
+### Coroutine Builders:
 - launch{} --> generate job
 - async{} --> return deffered
 
@@ -300,7 +259,7 @@ runBlocking {
 ```
 
 ## Context
-- Dispatcher: which thread the coroutine is run on
+- Dispatcher: which thread the coroutine is run on 
 - Job: handle on the coroutines
 ```
     runBlocking {
@@ -334,6 +293,24 @@ runBlocking {
 
 ## Suspending function:
 - make callbacks seamless
+- 2 suspend fun can access the value in main:
+```
+var number=0
+fun main(){
+    GlobalScope.launch{func1()}
+    GlobalScope.launch{func2()}
+
+    println("$number") --> // 2, thats because coroutine can access in main thread
+}
+
+
+suspend fun func1(){
+    number++
+}
+suspend fun func2(){
+    number++
+}
+```
 ```
 fun main() {
     GlobalScope.launch {
@@ -353,18 +330,80 @@ suspend fun seyHello() {
     - join()
 - if a job is cancelled, all its parents and children will be cancelled too
 
+**Ex1:**
+```
+    fun main(){
+        runBlocking{
+            val job1=launch{
+                delay(3000L)
+                println("Job1 lunch")
+            }
+            job1.invokeOnCompletion{println("job1 completed")}
+
+            delay(500L)
+            prinltn("Job1 will be cancel")
+            job1.cancel()
+        }
+    } 
+    // Job1 will be cancel
+    // job1 completed
+```
+**Ex2:**
+```
+    fun main(){
+        runBlocking{
+            val job1=launch{
+                println("Job1 launched")
+
+                val job2 = launch{
+                    println("Job2 launched")
+                    delay(3000L)
+                    println("Job2 is finishing")
+                }
+                job2.invokeOnCompletion{println("Job2 completed")}
+
+                val job3 = launch{
+                    println("Job3 launched")
+                    delay(3000L)
+                    println("Job3 is finishing")
+                }
+                job3.invokeOnCompletion{println("Job3 completed")}
+
+            }
+
+            job1.invokeOnCompletion{println("Job1 completed)}
+            delay(500L)
+            println("Job will be cancelled")
+            job1.cancel()
+        }
+    }
+
+    //note: after job1 cancelled all children will be cancelled too
+
+
+    // Job1 launched
+    // Job2 launched
+    // Job3 launched
+    // Job1 will be cancelled
+    // Job2 completed
+    // Job3 completed
+    // Job1 completed
+```
 
 ## Dispatchers:
 **A dispatcher determines which thread or thread pool the coroutine runs on**
 
 **Different dispatcher are available depending on the task specificity**
 - Main
-    - main thread update in ui
+    - main thread update in ui 
     - main dispatcher needs to be defined in gradle
 - Default
+    - useful for CPU intensive work
     - useful for network communication or reading/writing files
 - Unconfined
     - starts the corotine in the inherited dispatcher that called it
+- newSingleThreadContext("MyThread")
+    - force create a new thread
 ```
 fun main() {
     runBlocking {
@@ -392,7 +431,7 @@ fun main() {
 // Unconfined 2 kotlinx.coroutines.DefaultExecutor
 ```
 
-- the point is in  **Unconfined** Dispatcher change the current thread to another inherited thread.
+- the point is in  **Unconfined** Dispatcher change the current thread to another inherited thread. 
 
 
 ## async
@@ -425,7 +464,7 @@ fun main() {
 suspend fun getFirstValue(): Int {
     delay(1000L)
     val nextInt = Random.nextInt(100)
-    println(nextInt)
+    println("first value:$nextInt")
     return nextInt
 }
 
@@ -433,12 +472,20 @@ suspend fun getFirstValue(): Int {
 suspend fun getSecondValue(): Int {
     delay(2000L)
     val nextInt = Random.nextInt(1000)
-    println(nextInt)
+    println("second value:$nextInt")
     return nextInt
 }
+// Doing some
+// Waiting for values
+// first values : 13
+// second values: 472
+// The total is 485
 ```
 
-### withContext in Kotlin Coroutines
+**withContext in Kotlin Coroutines**
+- its lightweight to swtching between the threads
+- allow us to easily change the context
+- very lightweight
 
 ```
 // kotlin function using async
@@ -527,27 +574,134 @@ suspend fun function2(): String{
 
 
 ## Exception Handling
-- launch
-- async
+- Exception behaviour depeneds on the coroutine builder
+- launch generate a job
+- async generate a defered
+
+**Note:**
+
+the another pint is job need to join to get exception and the defered need to await 
 
 for example:
 ```
-val myHandle=CoroutineExceptionHandler{
-coroutineContext,throwable->
+val myHandle=CoroutineExceptionHandler{coroutineContext,throwable->
     // handle exception    
+    println("Exception handling $throwable.localizedMessage")
 }
 
-launch(myHandler){
+val job = GlobalScope.launch(myHandler){
     // do some task here
-    throw IndexOutOfBoundException()
+    println("doing sth in job")
+    throw IndexOutOfBoundException("Your messsage here...")
+}
+job.join()
+
+// doing sth in job
+// Exception handling Your message here
+```
+ex2:
+```
+val defered = GlobalScope.async{
+    println("Throwing exception from async")
+    throw ArtimethicException("exception from here")
 }
 
+try{
+    defere.await()
+}catch{
+    println("Cought Artimethic exception $e.localizeMessage")
+}
 
-launch(Dispatchers.Default+myHandler){
-    // do some task here
-    throw IndexOutOfBoundException()
+// Throwing exception from async
+// Cought Artimethic exception exception from here
+```
+
+#### Android Exaples:
+```
+private val coroutineScope = CoroutineScope(Dispatcher.Main)
+
+coroutineScope.launch{coroutineScope.async(Dispatcher.IO){// do sth }}.await()
+
+coroutineScope.launch{coroutineSCope.async(Dispatcher.Default){//do sth}}.await()
+```
+***note:*** is we can change the scope from one coroutin easily
+
+# Flow
+### Creating flow:
+- emiting value: emit(1)
+- collection can be flow:listOf(1,2,3).asFlow()
+- flowOf(args values): flowOf("one","two","three")
+
+### Flows Properties:
+**Cold**
+- flows are cold: the code does not run until the collect func is called.
+
+**Cancelation**
+- flow cannot be cancelled by itself
+- flow is transparent for cancellation
+- we should cancel the coroutine to  cancel the flow
+
+
+**Operations**
+- map: just map it to another value
+- filter:
+- transform:
+- take: 
+```
+(1..10).asFlow().take(2).collect{println(it)}
+```
+- reduce:
+```
+val size=10
+val factorial=(1..size).asFlow().reduce{accumulator,value -> accumulator* value}
+```
+- flowsOn:
+```
+(1..10).asFlow().flowsOn(Dispatcher.IO).collect{println(it)}
+```
+
+**Buffering**
+
+in case  processing a flow takes a long time a buffer is useful to accumulate flow values that can be processed later
+```
+fun generate():Flow<Int> = flow{
+    for(i in 1..3){
+        delay(100)
+        emit(i)
+    }
+}
+
+val time = meassureTimMillis{
+    generate()
+    .buffer()
+    .collect{
+        delay(300)
+        println(it)
+    }
 }
 ```
+in this senario we have buffer like this:
+        
+        buffer
+           |
+        collect
+           |
+        emit(1)
+          +100 ms
+        /         \
+       /           \
+    emit(2)         \
+    add to buffer   process(1)
+           |          +300 ms
+           |             |
+    emit(3) -------------|   
+    add to buffer        |
+                process(1) from buffer
+                +300 ms
+                         |
+                         |
+                process(1) from buffer
+                +300 ms                       
 ----------------------------------------------------------------
 # Algoithms -  BigO
 - Theoretical definition of the compolexity of an algorithm as a function of the size.
@@ -594,7 +748,7 @@ in this list 1,2,3,4,5,6,7,8
 - 1   2
 - 1
 
-we need to split list from middle
+we need to split list from middle 
 ```
 fun binarySearch(list: List<Int>, target: Int): Int? {
     var left = 0
@@ -617,7 +771,7 @@ fun main() {
 
 ```
 
-### O(a) , O(b)
+### O(a) , O(b) 
 
 ```
 fun printItems(a: Int, b: Int) {
@@ -652,35 +806,35 @@ in this list=[11,2,3,24]
 - for adding item:
     - list.add(15) ==> [11,2,3,23,15] ---> O(1)
     - list.remove(15) ==> [11,2,3,23,15] ---> O(1)
-
+  
 **O(n)**
 - for reIndexing item in lists
-    - list.add(0,15) ==> [15,11,2,3,23]
+    - list.add(0,15) ==> [15,11,2,3,23] 
     - list.remove(15) ==> [15,11,2,3,23]
 
-its make O(n) , bcs every index going to replce each other
+ its make O(n) , bcs every index going to replce each other
+ 
+ another way to say that, is when we want find by number is O(n)
 
-another way to say that, is when we want find by number is O(n)
-
-but when we want to find number by index is O(1)
-
-
-## Wrap Up
-
-**O(n2)** ==> loop within a Loop
-
-**O(n)** ==> Proportional
-
-**O(log n)** ==> Divide and Conquer
-
-**O(1)** ==> Constant
+ but when we want to find number by index is O(1)
 
 
+ ## Wrap Up
 
-# LinkedList
+  **O(n2)** ==> loop within a Loop
+
+  **O(n)** ==> Proportional
+
+  **O(log n)** ==> Divide and Conquer
+
+  **O(1)** ==> Constant
 
 
-read, add and delete is O(n)
+
+  # LinkedList
+
+
+  read, add and delete is O(n)
 
 
 # Stack
@@ -775,7 +929,7 @@ for comparistion linkedList :
 
 
 ### lookup():
-for example lookup 92 :
+for example lookup 92 : 
 - we should start from 47 until 92, so its **O(n)** in linkedList
 - but in binarySearchTree is **O(log n)**
 - so for like this binarySeach better than linkedList
@@ -835,8 +989,6 @@ insert:
     }
 
 ```
-
-
 # Kotlin
 ## Scope Function
     - apply,with,run,let,also
