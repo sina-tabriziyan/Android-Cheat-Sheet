@@ -644,8 +644,38 @@ coroutineScope.launch{coroutineSCope.async(Dispatcher.Default){//do sth}}.await(
 
 **Operations**
 - map: just map it to another value
+```
+(1..10).asFlow().map{
+    delay(500)
+    "mapping $it"
+}.collect{
+    println(it)
+}
+```
 - filter:
+```
+(1..10).asFlow().filter{
+    it % 2 == 0
+}.collect{
+    println(it)
+}
+```
 - transform:
+```
+(1..10).asFlow().transform{
+    emit("string value $it")
+    emit(it)
+}.collect{
+    println(it)
+}
+// 1
+// string value 1
+// 2
+// string value 2
+.
+.
+.
+```
 - take: 
 ```
 (1..10).asFlow().take(2).collect{println(it)}
@@ -701,7 +731,188 @@ in this senario we have buffer like this:
                          |
                          |
                 process(1) from buffer
-                +300 ms                       
+                +300 ms              
+
+
+
+**Compose flow**
+- zip :           
+```
+val english = flowOf("One","Two","Three")
+val french = flowOf("Un","Deux","Trois")
+english.zip(french){
+    a,b-> " '$a' in french is '$b' "
+}.collect{println(it)}
+
+// 'One' in french is 'Un'
+// 'Two' in french is 'Deux'
+// 'Three' in french is 'Troix'
+```            
+
+- combine :
+```
+val numbers = (1..5).asFlow().onEach{delay(300)}
+val values = flowOf("One","Two","Three","Four","Five").onEach{delay(400)}
+
+numbers.combine(values){a,b -> "$a is $b"}
+.collect{println(it)}
+
+// 1 is One
+// 2 is Two
+.
+.
+.
+```
+
+- onCompletion
+```
+(1..3).asFlow()
+    .onEach{check(it!=2)}
+    .onCompletion{cause->
+        if(cause != null) println("Flow completed with $cause")
+        else pring("Flow completed successful;y")
+    }
+    .catch{e -> println("Caught exception $e")}
+    .collect{println(it)}
+// 1
+// Flow completed with exception .....
+// Caught exception ....
+```
+
+
+
+#### Channels
+
+- a channel is queue of data 
+- a coroutine can asynchronously put elements : .send(data)
+- another  blockingly get elements: .receive()
+- a channel is closed when ther are no more elements: .close
+
+```
+val channel = Channel<Int>()
+launch{
+    for (x in 1..5) channel.send(x*x)
+    channel.clsoe()
+}
+
+for (i in channel) println(i)
+// 1
+// 4
+// 9
+// 16
+// 25
+```
+
+**channel produce**
+- allows a data source to create and return a channel
+- CoroutineScope.produce{...}
+- need a coroutine scope
+```
+val channel = produce{
+    for (x in 1..5) send(x*x)
+}
+
+for (y in channel) println(y)
+```
+or we can use ext fun:
+```
+fun CoroutineScope.produceSquares() = produce {
+    for(x in 1..5) send(x*x)
+}
+
+
+fun main(){
+    runBlocking{
+        for (y in produceSquers()) println(y)
+    }
+}
+```
+
+or use this simpler:
+```
+fun main(){
+    runBlocking{
+        produceSquers().consumeEach{println(it)}
+    }
+}
+```
+
+**Pipelines in channels**
+
+this means one channel as input of another channel
+```
+fun CoroutineScope.produceNumbers() = produce {
+    var x = 1
+    while(true) send(x++)
+}
+
+fun CorooutineScope.squarNumbers : ReceiveChannel<Int> = produce {
+    for (x in numbers) send(x*x)
+}
+
+
+fun main(){
+
+    val numbers = produceNumbers()
+    val squers = squers(numbers)
+    for (i in 1..5){
+        println(squers.receive())
+    }
+
+    coroutineContext.cancelChildren()
+}
+```
+
+**Shared State Problmes:**
+like bellow when multiple coroutine accessing the one values at same time we might be miss somthing in it:
+
+```
+suspend fun massiveRuns(action:suspend () -> Unit){
+    val n = 100
+    val k = 1000
+
+    val time = measureTimeMillis{
+        coroutineScope{
+            repeat(n){
+                launch{
+                    repeat(k){
+                        action()
+                    }
+                }
+            }
+        }
+    }
+
+    println("Completed $(n*k) actions in $time ms")
+}
+
+
+fun main(){
+    runBlocking{
+        var counter = 0
+        withContext(Dispatcher.Default){
+            massiveRun{counter++}
+        }
+        println("Counter $counter)
+    }
+}
+
+// 100,000
+// 56,323
+
+as you can see its huge difference between numbers
+```
+
+solutions:
+- 1 - Atomic variables: 
+    - is basically in a values that can be update from only one thread at a time.
+    - it cannot be divided into multiple parts.
+    - if multiple coroutine wants to access the atomic value at the same time they have to wait each others turn.
+    - works well for mirmitive data type and collection
+    - make complex for custom class we define them
+
+- 2 - Thread Confinment:
+
 ----------------------------------------------------------------
 # Algoithms -  BigO
 - Theoretical definition of the compolexity of an algorithm as a function of the size.
